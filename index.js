@@ -1,30 +1,24 @@
 const express = require("express");
 const app = express();
+require("dotenv").config();
 const port = 3000;
 
-app.get("/", (req, res) => {
-  res.json({
-    statusCode: 200,
-    statusMessage: "Success",
-    data: {
-      message: "Welcome to Express API",
-    },
-  });
-});
+const home = require("./controllers/home");
+
+app.get("/", home);
 
 app.all("*", function (req, res) {
-  res.status(404);
-  res.json({
+  res.status(404).json({
     errorCode: 404,
     errorMessage: "Not Found",
   });
 });
 
 app.use((err, req, res, next) => {
-  res.status(500);
-  res.json({
+  res.status(500).json({
     errorCode: 500,
-    errorMessage: err.message,
+    errorMessage:
+      process.env.NODE_ENV === "production" ? "Server Error" : err.message,
   });
 });
 
