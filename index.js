@@ -1,13 +1,15 @@
 const express = require("express");
 const app = express();
 require("dotenv").config();
+const fs = require("fs");
 const port = 3000;
-
-const home = require("./controllers/home");
+const home = require("./controllers/homeController");
+const postsRouter = require("./routes/posts");
 
 app.get("/", home);
+app.use("/posts", postsRouter);
 
-app.all("*", function (req, res) {
+app.use((req, res) => {
   res.status(404).json({
     errorCode: 404,
     errorMessage: "Not Found",
@@ -15,6 +17,10 @@ app.all("*", function (req, res) {
 });
 
 app.use((err, req, res, next) => {
+  fs.
+  fs.appendFile("./storage/logs/error.log", `\n${err.message}`, (err) => {
+    if (err) console.log(err);
+  });
   res.status(500).json({
     errorCode: 500,
     errorMessage:
