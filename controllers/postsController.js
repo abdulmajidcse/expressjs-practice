@@ -6,7 +6,7 @@ const postStore = (req, res) => {
   res.json({
     statusCode: 200,
     statusMessage: "Post Store Route",
-    body: req.body,
+    data: { ...req.body, photo: req.file },
   });
 };
 

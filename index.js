@@ -6,6 +6,9 @@ const port = 3000;
 const home = require("./controllers/homeController");
 const postsRouter = require("./routes/posts");
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.get("/", home);
 app.use("/posts", postsRouter);
 
@@ -17,8 +20,7 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  fs.
-  fs.appendFile("./storage/logs/error.log", `\n${err.message}`, (err) => {
+  fs.fs.appendFile("storage/logs/error.log", `\n${err.message}`, (err) => {
     if (err) console.log(err);
   });
   res.status(500).json({
