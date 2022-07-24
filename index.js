@@ -6,12 +6,14 @@ const port = 3000;
 const home = require("./controllers/homeController");
 const postsRouter = require("./routes/posts");
 const errorResource = require("./resources/errorResource");
+const usersRoute = require("./routes/users");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get("/", home);
 app.use("/posts", postsRouter);
+app.use("/users", usersRoute);
 
 app.use((req, res) => {
   res.status(404).json(errorResource([], 404, "Not found"));
