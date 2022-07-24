@@ -20,7 +20,7 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  fs.fs.appendFile("storage/logs/error.log", `\n${err.message}`, (err) => {
+  fs.appendFile("storage/logs/error.log", `\n${err.message}`, (err) => {
     if (err) console.log(err);
   });
   res.status(500).json({
