@@ -1,4 +1,6 @@
 const { matchedData, validationResult } = require("express-validator");
+const errorResource = require("./../resources/errorResource");
+const successResource = require("./../resources/successResource");
 
 const postIndex = (req, res) => {
   res.send("post index route");
@@ -8,21 +10,12 @@ const postStore = (req, res) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    return res.status(422).json({
-      errorCode: 422,
-      errorMessage: "Error occuired",
-      errors: errors.array(),
-    });
+    return res.status(422).json(errorResource(errors.array(), 422));
   }
 
   const validateData = matchedData(req);
 
-  res.json({
-    statusCode: 200,
-    statusMessage: "Post Store Route",
-    data: { ...validateData },
-    photo: req.file,
-  });
+  res.json(successResource(validateData));
 };
 
 module.exports = { postIndex, postStore };
