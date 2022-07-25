@@ -7,7 +7,7 @@ const userIndex = (req, res) => {
   res.send("post index route");
 };
 
-const userStore = async (req, res, next) => {
+const userStore = async (req, res) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
@@ -17,12 +17,12 @@ const userStore = async (req, res, next) => {
   const validateData = matchedData(req);
 
   try {
-    res.json(successResource(await User.create(validateData)));
+    res.json(
+      successResource(await User.create(validateData), 201, "User created")
+    );
   } catch (error) {
-    res.json(errorResource([], 500, error.message));
+    res.status(422).json(errorResource([], 422, error.message));
   }
-
-  // res.json(successResource(validateData));
 };
 
 module.exports = { userIndex, userStore };
