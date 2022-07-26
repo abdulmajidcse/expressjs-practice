@@ -16,9 +16,19 @@ const register = async (req, res) => {
 
   try {
     const bcryptPassword = await bcrypt.hash(validateData.password, 10);
+    const user = await User.create({
+      ...validateData,
+      password: bcryptPassword,
+    });
     res.json(
       successResource(
-        await User.create({ ...validateData, password: bcryptPassword }),
+        {
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          createdAt: user.createdAt,
+          updatedAt: user.updatedAt,
+        },
         201,
         "User registered successfully"
       )
@@ -45,9 +55,13 @@ const login = async (req, res) => {
     ) {
       // generate jsonwebtoken and return to user
       const expiresIn = process.env.JWT_EXPIRES_IN ?? "30d";
-      const token = await jwt.sign({ id: authUser._id }, process.env.JWT_SECRET, {
-        expiresIn: expiresIn,
-      });
+      const token = await jwt.sign(
+        { id: authUser._id },
+        process.env.JWT_SECRET,
+        {
+          expiresIn: expiresIn,
+        }
+      );
       res.json(
         successResource(
           { token: token, type: "Bearer", expiresIn: expiresIn },
