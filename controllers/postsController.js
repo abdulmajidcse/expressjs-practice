@@ -15,7 +15,7 @@ const postStore = (req, res) => {
 
   const validateData = matchedData(req);
 
-  res.json(successResource(validateData));
+  return res.json(successResource(validateData));
 };
 
 module.exports = { postIndex, postStore };
