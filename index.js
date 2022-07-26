@@ -9,6 +9,7 @@ const errorResource = require("./resources/errorResource");
 const usersRoute = require("./routes/users");
 const guestRoute = require("./routes/guest");
 const authRoute = require("./routes/auth");
+const authenticate = require("./middlewares/authenticate");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -17,7 +18,7 @@ app.get("/", home);
 app.use("/posts", postsRouter);
 app.use("/users", usersRoute);
 app.use("/auth", guestRoute);
-app.use("/auth", authRoute);
+app.use("/auth", authenticate, authRoute);
 
 app.use((req, res) => {
   res.status(404).json(errorResource([], 404, "Not found"));

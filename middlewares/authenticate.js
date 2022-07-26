@@ -10,16 +10,14 @@ const authenticate = async (req, res, next) => {
   if (tokenType === "Bearer" && token) {
     try {
       const { id } = await jwt.verify(token, process.env.JWT_SECRET);
-      const user = await User.findById(id).select({
-        password: 0,
-        __v: 0,
-      });
-      res.send(user ?? "token");
+      const user = await User.findById(id).select({ password: 0, __v: 0 });
+      req.auth = { user: user };
+      return next();
     } catch (error) {
-      res.json(errorResource([], 401, "Authentication failed"));
+      return res.json(errorResource([], 401, "Authentication failed"));
     }
   } else {
-    res.json(errorResource([], 401, "Authentication failed"));
+    return res.json(errorResource([], 401, "Authentication failed"));
   }
 };
 

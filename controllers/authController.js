@@ -1,8 +1,9 @@
 const errorResource = require("../resources/errorResource");
 const successResource = require("../resources/successResource");
+const jwt = require("jsonwebtoken");
 
-const user = async (req, res) => {
-  res.json(successResource(req.body));
+const user = (req, res) => {
+  return res.json(successResource(req.auth.user));
 };
 
 module.exports = { user };
