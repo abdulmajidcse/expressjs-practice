@@ -1,7 +1,7 @@
 const errorResource = (
   errors = [],
   errorCode = 422,
-  errorMessage = "Error occured"
+  errorMessage = "Error"
 ) => {
   return {
     errorCode: errorCode,

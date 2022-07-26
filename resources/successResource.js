@@ -1,7 +1,7 @@
 const successResource = (
   data = [],
   statusCode = 200,
-  statusMessage = "Data retrieved successfully"
+  statusMessage = "Success"
 ) => {
   return {
     statusCode: statusCode,

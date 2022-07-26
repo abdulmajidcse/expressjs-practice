@@ -45,7 +45,7 @@ const login = async (req, res) => {
     ) {
       // generate jsonwebtoken and return to user
       const expiresIn = process.env.JWT_EXPIRES_IN ?? "30d";
-      const token = jwt.sign({ id: authUser._id }, process.env.JWT_SECRET, {
+      const token = await jwt.sign({ id: authUser._id }, process.env.JWT_SECRET, {
         expiresIn: expiresIn,
       });
       res.json(
