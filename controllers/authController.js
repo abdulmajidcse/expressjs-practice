@@ -4,7 +4,7 @@ const successResource = require("../resources/successResource");
 const User = require("../models/user");
 
 const user = (req, res) => {
-  return res.json(successResource(req.auth.user));
+  return res.json(successResource(req.user));
 };
 
 const profileUpdate = async (req, res) => {
@@ -15,7 +15,7 @@ const profileUpdate = async (req, res) => {
   }
 
   const validateData = matchedData(req);
-  const user = req.auth.user;
+  const user = req.user;
   await User.updateOne({ _id: user._id }, validateData);
   const updatedUser = await User.findById(user.id).select({
     password: 0,

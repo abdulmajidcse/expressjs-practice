@@ -19,7 +19,7 @@ const profileUpdateRequest = checkSchema({
     },
     custom: {
       options: (value, { req }) => {
-        if (req.auth.user.email === value) return true;
+        if (req.user.email === value) return true;
         return User.findOne()
           .where("email")
           .equals(value)
