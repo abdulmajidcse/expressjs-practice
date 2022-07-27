@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 require("dotenv").config();
 const fs = require("fs");
+const path = require("path");
 const port = 3000;
 const home = require("./controllers/homeController");
 const postsRouter = require("./routes/posts");
@@ -10,7 +11,14 @@ const usersRoute = require("./routes/users");
 const guestRoute = require("./routes/guest");
 const authRoute = require("./routes/auth");
 const authenticate = require("./middlewares/authenticate");
+const morgan = require("morgan");
 
+const logStream = fs.createWriteStream(
+  path.join(__dirname, "storage/logs/error.log"),
+  { flags: "a" }
+);
+
+app.use(morgan("common", { stream: logStream }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -21,13 +29,11 @@ app.use("/auth", guestRoute);
 app.use("/auth", authenticate, authRoute);
 
 app.use((req, res) => {
+  res.statusCode(404);
   res.status(404).json(errorResource([], 404, "Not found"));
 });
 
 app.use((err, req, res, next) => {
-  fs.appendFile("storage/logs/error.log", `\n${err.message}`, (err) => {
-    if (err) console.log(err);
-  });
   res
     .status(500)
     .json(
