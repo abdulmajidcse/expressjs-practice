@@ -29,7 +29,6 @@ app.use("/auth", guestRoute);
 app.use("/auth", authenticate, authRoute);
 
 app.use((req, res) => {
-  res.statusCode(404);
   res.status(404).json(errorResource([], 404, "Not found"));
 });
 

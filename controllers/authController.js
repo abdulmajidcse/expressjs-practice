@@ -8,6 +8,7 @@ const user = (req, res) => {
 };
 
 const profileUpdate = async (req, res) => {
+  // return res.json(req.body);
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
