@@ -35,15 +35,20 @@ app.use((req, res) => {
 
 app.use((err, req, res, next) => {
   console.log(err);
-  res
-    .status(500)
-    .json(
-      errorResource(
-        [],
-        500,
-        app.get("env") === "production" ? "Server Error" : err.message
-      )
-    );
+
+  if (err instanceof Array) {
+    return res.status(422).json(errorResource(err, 422));
+  } else {
+    return res
+      .status(500)
+      .json(
+        errorResource(
+          [],
+          500,
+          app.get("env") === "production" ? "Server Error" : err.message
+        )
+      );
+  }
 });
 
 app.listen(port, () => {
