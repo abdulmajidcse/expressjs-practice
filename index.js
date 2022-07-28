@@ -21,6 +21,7 @@ const logStream = fs.createWriteStream(
 app.use(morgan("common", { stream: logStream }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static("public"));
 
 app.get("/", home);
 app.use("/posts", postsRouter);
@@ -33,6 +34,7 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
+  console.log(err);
   res
     .status(500)
     .json(

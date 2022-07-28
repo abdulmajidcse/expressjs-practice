@@ -13,13 +13,23 @@ const storage = multer.diskStorage({
   filename: (req, file, cb) => {
     console.log(file);
     const ext = path.extname(file.originalname);
-    const fileName = Date.now();
-    const updateFileName = fileName + ext;
-    cb(null, updateFileName);
+    const fileName = randomUUID() + ext;
+    cb(null, fileName);
   },
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({
+  storage: storage,
+  fileFilter: (req, file, cb) => {
+    if (file.fieldname === "photo") {
+      // accept the file
+      cb(null, true);
+    } else {
+      // reject this file
+      cb(null, false);
+    }
+  },
+});
 
 router.get("/user", user);
 router.put(
