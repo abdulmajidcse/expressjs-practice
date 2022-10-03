@@ -34,8 +34,6 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  console.log(err);
-
   if (err instanceof Array) {
     return res.status(422).json(errorResource(err, 422));
   } else {
@@ -51,6 +49,4 @@ app.use((err, req, res, next) => {
   }
 });
 
-app.listen(port, () => {
-  console.log(`App listening on http://localhost:${port}`);
-});
+app.listen(port);
