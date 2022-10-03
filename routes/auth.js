@@ -11,7 +11,6 @@ const storage = multer.diskStorage({
     cb(null, "public/uploads/");
   },
   filename: (req, file, cb) => {
-    console.log(file);
     const ext = path.extname(file.originalname);
     const fileName = randomUUID() + ext;
     cb(null, fileName);

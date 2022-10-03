@@ -9,17 +9,18 @@ const user = (req, res) => {
 };
 
 const profileUpdate = async (req, res) => {
-  console.log(req.files);
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    req.files.length > 0 && (await fs.unlinkSync(req.files[0].path));
+    req.files &&
+      req.files.length > 0 &&
+      (await fs.unlinkSync(req.files[0].path));
     return res.status(422).json(errorResource(errors.array(), 422));
   }
 
   const user = req.user;
   let validateData = matchedData(req);
-  if (req.files.length > 0) {
+  if (req.files && req.files.length > 0) {
     user.photo && (await fs.unlinkSync(`public/uploads/${user.photo}`));
     validateData.photo = req.files[0].filename;
   }
