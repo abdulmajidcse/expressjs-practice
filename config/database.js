@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
 
-database = mongoose.connect("mongodb://localhost:27017/express_practice");
+database = mongoose.connect(process.env.MONGODB_URL);
 
 module.exports = database;
