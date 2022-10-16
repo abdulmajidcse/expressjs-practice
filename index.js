@@ -3,7 +3,6 @@ const app = express();
 require("dotenv").config();
 const fs = require("fs");
 const path = require("path");
-const port = 3000;
 const home = require("./controllers/homeController");
 const postsRouter = require("./routes/posts");
 const errorResource = require("./resources/errorResource");
@@ -49,4 +48,6 @@ app.use((err, req, res, next) => {
   }
 });
 
-app.listen(port);
+app.listen(process.env.APP_PORT, () => {
+  console.log(`App is lestening ${process.env.APP_URL}`);
+});

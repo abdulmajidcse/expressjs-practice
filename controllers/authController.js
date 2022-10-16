@@ -3,6 +3,7 @@ const errorResource = require("../resources/errorResource");
 const successResource = require("../resources/successResource");
 const User = require("../models/user");
 const fs = require("fs");
+const bcrypt = require("bcrypt");
 
 const user = (req, res) => {
   return res.json(successResource(req.user));
@@ -39,4 +40,21 @@ const profileUpdate = async (req, res) => {
   );
 };
 
-module.exports = { user, profileUpdate };
+// change password function
+const changePassword = async (req, res) => {
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).json(errorResource(errors.array(), 422));
+  }
+
+  const user = req.user;
+  let validateData = matchedData(req);
+  // password hashed and update user password
+  const bcryptPassword = await bcrypt.hash(validateData.new_password, 10);
+  await User.updateOne({ _id: user._id }, { password: bcryptPassword });
+
+  return res.json(successResource([], 200, "Your password changed"));
+};
+
+module.exports = { user, profileUpdate, changePassword };
