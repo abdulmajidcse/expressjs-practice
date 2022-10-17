@@ -1,4 +1,5 @@
 const nodemailer = require("nodemailer");
+const htmlToText = require("nodemailer-html-to-text").htmlToText;
 
 // create SMTP transport
 let transporter = nodemailer.createTransport({
@@ -10,5 +11,7 @@ let transporter = nodemailer.createTransport({
     pass: process.env.MAIL_PASSWORD,
   },
 });
+
+transporter.use("compile", htmlToText());
 
 module.exports = transporter;
