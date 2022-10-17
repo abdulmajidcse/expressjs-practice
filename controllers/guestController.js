@@ -4,6 +4,7 @@ const successResource = require("../resources/successResource");
 const User = require("./../models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const transporter = require("./../config/mail");
 
 const register = async (req, res) => {
   const errors = validationResult(req);
@@ -77,4 +78,41 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { register, login };
+const forgotPassword = async (req, res) => {
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).json(errorResource(errors.array(), 422));
+  }
+
+  try {
+    const validateData = matchedData(req);
+
+    // sending mail
+    await transporter.sendMail({
+      from: process.env.MAIL_FROM_ADDRESS,
+      to: validateData.email,
+      subject: "Password Recovery Code",
+      html: `<h3>Hello,</h3><p>You just request to recover your password. Your password recovery code is given below.</p><p><b>${parseInt(
+        Math.random().toString().substr(2, 6)
+      )}</b></p><p>Thank you!</p>`,
+    });
+
+    res.json(
+      successResource(
+        [],
+        200,
+        "We have sent password recovery code to your email address"
+      )
+    );
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .json(
+        errorResource([], 500, "Something went wrong. Please, try again later.")
+      );
+  }
+};
+
+module.exports = { register, login, forgotPassword };
